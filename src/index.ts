@@ -1,32 +1,49 @@
 import { GameManager } from "./gameManager";
-import { ManaResource } from "./manaResource";
-import { EnchantedBook } from "./enchantedBook";
+import { initResources, initGenerators, initShardGenerators } from "./init";
 
 const gm = new GameManager();
 let lastFrameTimeMs = 0,
-  maxFPS = 10;
+  maxFPS = 10,
+  delta = 0;
 
 function init() {
-  const mana = new ManaResource(10);
-  gm.addResouce(mana);
+  gm.addResouces(initResources());
+  gm.addGenerators(initGenerators(gm));
+  gm.addShardGenerators(initShardGenerators(gm));
 
-  const enchantedBook = new EnchantedBook(0.1, 10, mana);
-  gm.addGenerator(enchantedBook);
+  // TODO: Test code remove!!
+  document.querySelector("#collect").addEventListener("click", collect);
 
-  // Start things off
+  // Start things off; keep at bottom of init function!
   requestAnimationFrame(mainLoop);
+}
+
+// TODO: Test code remove!!
+function collect() {
+  console.log("collect");
+  const sg = gm.getShardGenerator("Fire Generator");
+  if (sg.collect()) {
+    const res = gm.getResource(sg.generates.name);
+    res.add(sg.genAmount);
+  }
 }
 
 function draw(delta) {
   // TODO: Test code remove!!
-  document.querySelector("#mana").innerHTML = `${gm.resources[0].amount.toFixed(
-    2
-  )}`;
+  document.querySelector("#mana").innerHTML = `${gm
+    .getResource("Mana")
+    .amount.toFixed(2)}`;
+
+  // TODO: Test code remove!!
+  document.querySelector(
+    "#firePercent"
+  ).innerHTML = `${gm.shardGenerators[0].getPercent()}`;
 }
 
 // The primary game
 function update(delta) {
   gm.generate(delta);
+  gm.tickShardGenerators(delta);
 }
 
 // The loop, should not be editted
@@ -37,7 +54,7 @@ function mainLoop(timestamp) {
     return;
   }
   // Calculate the time between frames
-  const delta = (timestamp - lastFrameTimeMs) / 1000;
+  delta = (timestamp - lastFrameTimeMs) / 1000;
   lastFrameTimeMs = timestamp;
   // Run the update and draw
   update(delta);
@@ -51,10 +68,3 @@ function mainLoop(timestamp) {
 init();
 // Initialize the screen
 draw(0);
-
-// TODO: Test code remove!!
-setTimeout(() => {
-  if (!gm.buyGenerator("Enchanted Book")) {
-    console.error("oh no");
-  }
-}, 1000);
