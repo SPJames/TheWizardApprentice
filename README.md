@@ -1,2 +1,0 @@
-# TheWizardApprentice
-Created with CodeSandbox
