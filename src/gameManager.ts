@@ -1,6 +1,6 @@
-import { iResource } from "./iResource";
-import { iGenerator } from "./iGenerator";
-import { iShardGenerator } from "./iShardGenerator";
+import { iResource } from './iResource';
+import { iGenerator } from './iGenerator';
+import { iShardGenerator } from './iShardGenerator';
 
 // Singleton declaration
 let _gm = null;
@@ -25,7 +25,7 @@ export class GameManager {
     this.resources = this.resources.concat(resources);
   }
   getResource(name: string): iResource {
-    return this.resources.find(r => r.name === name);
+    return this.resources.find((r) => r.name === name);
   }
 
   addGenerator(generator: iGenerator): void {
@@ -35,7 +35,7 @@ export class GameManager {
     this.generators = this.generators.concat(generators);
   }
   getGenerator(name: string): iGenerator {
-    return this.generators.find(g => g.name === name);
+    return this.generators.find((g) => g.name === name);
   }
 
   addShardGenerator(generator: iShardGenerator): void {
@@ -45,15 +45,15 @@ export class GameManager {
     this.shardGenerators = this.shardGenerators.concat(generators);
   }
   getShardGenerator(name: string): iShardGenerator {
-    return this.shardGenerators.find(sg => sg.name === name);
+    return this.shardGenerators.find((sg) => sg.name === name);
   }
 
   buyGenerator(genName: string, levels?: number): boolean {
-    const gen = this.generators.find(g => g.name === genName);
+    const gen = this.generators.find((g) => g.name === genName);
     const res = this.getResource(gen.generates.name);
     if (gen.cost <= res.amount) {
-      gen.buy(levels || 1);
       res.spend(gen.cost);
+      gen.buy(levels || 1);
       return true;
     }
     return false;

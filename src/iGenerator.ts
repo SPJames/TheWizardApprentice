@@ -1,4 +1,4 @@
-import { iResource } from "./iResource";
+import { iResource } from './iResource';
 
 export interface iGenerator {
   bought: boolean;
@@ -7,7 +7,12 @@ export interface iGenerator {
   cost: number;
   name: string;
   generates: iResource;
+  renderId: number;
   buy(levels: number): void;
 
   getGenAmount(): number;
+
+  initDraw(): DocumentFragment;
+
+  render(): void;
 }

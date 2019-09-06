@@ -1,9 +1,14 @@
-import { GameManager } from "./gameManager";
-import { initResources, initGenerators, initShardGenerators } from "./init";
+import { GameManager } from './gameManager';
+import {
+  initResources,
+  initGenerators,
+  initShardGenerators,
+  config,
+} from './init';
 
 const gm = new GameManager();
 let lastFrameTimeMs = 0,
-  maxFPS = 10,
+  maxFPS = 5,
   delta = 0;
 
 function init() {
@@ -11,33 +16,24 @@ function init() {
   gm.addGenerators(initGenerators(gm));
   gm.addShardGenerators(initShardGenerators(gm));
 
-  // TODO: Test code remove!!
-  document.querySelector("#collect").addEventListener("click", collect);
-
+  for (let generator of gm.generators) {
+    document.querySelector('.generators').appendChild(generator.initDraw());
+    document
+      .querySelector(`[data-action='${generator.renderId}-buy']`)
+      .addEventListener('click', () => gm.buyGenerator(generator.name, 1));
+  }
   // Start things off; keep at bottom of init function!
   requestAnimationFrame(mainLoop);
 }
 
-// TODO: Test code remove!!
-function collect() {
-  console.log("collect");
-  const sg = gm.getShardGenerator("Fire Generator");
-  if (sg.collect()) {
-    const res = gm.getResource(sg.generates.name);
-    res.add(sg.genAmount);
-  }
-}
-
 function draw(delta) {
-  // TODO: Test code remove!!
-  document.querySelector("#mana").innerHTML = `${gm
-    .getResource("Mana")
+  document.querySelector('#mana').innerHTML = `${gm
+    .getResource(config.primaryResource)
     .amount.toFixed(2)}`;
 
-  // TODO: Test code remove!!
-  document.querySelector(
-    "#firePercent"
-  ).innerHTML = `${gm.shardGenerators[0].getPercent()}`;
+  for (let generator of gm.generators) {
+    generator.render();
+  }
 }
 
 // The primary game
