@@ -1,4 +1,4 @@
-import { iResource } from "./iResource";
+import { iResource } from "./interfaces/iResource";
 
 export class ShardResource implements iResource {
   amount: number;

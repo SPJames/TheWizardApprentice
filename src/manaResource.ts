@@ -1,4 +1,4 @@
-import { iResource } from "./iResource";
+import { iResource } from "./interfaces/iResource";
 export class ManaResource implements iResource {
   amount: number;
   name: string;

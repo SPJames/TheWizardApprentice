@@ -1,6 +1,6 @@
-import { iResource } from './iResource';
-import { iGenerator } from './iGenerator';
-import { iShardGenerator } from './iShardGenerator';
+import { iResource } from './interfaces/iResource';
+import { iGenerator } from './interfaces/iGenerator';
+import { iShardGenerator } from './interfaces/iShardGenerator';
 
 // Singleton declaration
 let _gm = null;

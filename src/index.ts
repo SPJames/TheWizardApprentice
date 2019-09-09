@@ -7,26 +7,26 @@ import {
 } from './init';
 
 const gm = new GameManager();
-let lastFrameTimeMs = 0,
-  maxFPS = 5,
-  delta = 0;
+let lastFrameTimeMs: number = 0;
+let maxFPS: number = 5;
+let delta: number = 0;
 
-function init() {
+// Initialize the game
+function init(): void {
   gm.addResouces(initResources());
   gm.addGenerators(initGenerators(gm));
   gm.addShardGenerators(initShardGenerators(gm));
 
-  for (let generator of gm.generators) {
-    document.querySelector('.generators').appendChild(generator.initDraw());
-    document
-      .querySelector(`[data-action='${generator.renderId}-buy']`)
-      .addEventListener('click', () => gm.buyGenerator(generator.name, 1));
+  for (let gen of gm.generators) {
+    gen.HTML.on('buy', 'click', () => gm.buyGenerator(gen.name, 1));
   }
+
   // Start things off; keep at bottom of init function!
   requestAnimationFrame(mainLoop);
 }
 
-function draw(delta) {
+// The rerendering per frame
+function draw(delta: number): void {
   document.querySelector('#mana').innerHTML = `${gm
     .getResource(config.primaryResource)
     .amount.toFixed(2)}`;
@@ -37,13 +37,13 @@ function draw(delta) {
 }
 
 // The primary game
-function update(delta) {
+function update(delta: number): void {
   gm.generate(delta);
   gm.tickShardGenerators(delta);
 }
 
 // The loop, should not be editted
-function mainLoop(timestamp) {
+function mainLoop(timestamp: number): void {
   // Throttle the framerate
   if (timestamp < lastFrameTimeMs + 1000 / maxFPS) {
     requestAnimationFrame(mainLoop);

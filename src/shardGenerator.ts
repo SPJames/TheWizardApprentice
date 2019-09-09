@@ -1,5 +1,5 @@
-import { iShardGenerator } from "./iShardGenerator";
-import { iResource } from "./iResource";
+import { iShardGenerator } from "./interfaces/iShardGenerator";
+import { iResource } from "./interfaces/iResource";
 
 export class ShardGenerator implements iShardGenerator {
   bought: boolean;

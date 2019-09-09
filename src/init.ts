@@ -1,10 +1,11 @@
 import { ManaResource } from './manaResource';
-import { EnchantedBook } from './enchantedBook';
+import { EnchantedBook } from './generators/enchantedBook';
 import { ShardResource } from './shardResource';
 import { ShardGenerator } from './shardGenerator';
-import { iGenerator } from './iGenerator';
-import { iShardGenerator } from './iShardGenerator';
-import { iResource } from './iResource';
+import { iGenerator } from './interfaces/iGenerator';
+import { iShardGenerator } from './interfaces/iShardGenerator';
+import { iResource } from './interfaces/iResource';
+import { PotionBrewing } from './generators/potionBrewing';
 
 export const config = {
   primaryResource: 'Mana',
@@ -35,7 +36,10 @@ export function initResources(): iResource[] {
 }
 
 export function initGenerators(gm): iGenerator[] {
-  return [new EnchantedBook(0.1, 10, gm.getResource(config.primaryResource))];
+  return [
+    new PotionBrewing(1, 10, gm.getResource(config.primaryResource)),
+    new EnchantedBook(10, 100, gm.getResource(config.primaryResource)),
+  ];
 }
 
 export function initShardGenerators(gm): iShardGenerator[] {
